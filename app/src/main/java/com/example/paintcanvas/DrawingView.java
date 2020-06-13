@@ -97,8 +97,8 @@ public class DrawingView extends View implements OnTouchListener {
         paths.add(mPath);
     }
 
-    public void onClickUndo () {
-        if (paths.size()>0) {
+    public void onClickUndo(){
+        if (paths.size()>0){
             undonePaths.add(paths.remove(paths.size()-1));
             invalidate(); //redraw on screen
         }else{
@@ -107,7 +107,7 @@ public class DrawingView extends View implements OnTouchListener {
         //toast the user
     }
 
-    public void onClickRedo (){
+    public void onClickRedo(){
         if (undonePaths.size()>0){
             paths.add(undonePaths.remove(undonePaths.size()-1));
             invalidate();
@@ -115,6 +115,12 @@ public class DrawingView extends View implements OnTouchListener {
 
         }
         //toast the user
+    }
+
+    public void onClickRestart(){
+        paths.clear();
+        undonePaths.clear();
+        invalidate();
     }
 
     @Override

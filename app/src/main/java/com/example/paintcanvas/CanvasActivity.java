@@ -40,5 +40,13 @@ public class CanvasActivity extends AppCompatActivity {
                 drawView.onClickRedo();
             }
         });
+        //RESTART BUTTON
+        Button btn_restart = (Button) findViewById(R.id.restartButton);
+        btn_restart.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                drawView.onClickRestart();
+            }
+        });
     }
 }

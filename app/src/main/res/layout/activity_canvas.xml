@@ -33,6 +33,14 @@
         app:layout_constraintTop_toTopOf="@+id/toolbar">
 
         <Button
+            android:id="@+id/restartButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Restart"
+            android:textSize="6dp"/>
+
+        <Button
             android:id="@+id/insertButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -79,16 +87,9 @@
             android:layout_weight="1"
             android:text="redo"
             android:textSize="10dp"/>
-
-        <Button
-            android:id="@+id/shareButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="share"
-            android:textSize="10dp"/>
     </LinearLayout>
 
+    <!-- The Drawing View-->
     <FrameLayout
         android:id="@+id/drawView_frame"
         android:layout_width="0dp"
