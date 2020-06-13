@@ -33,14 +33,6 @@
         app:layout_constraintTop_toTopOf="@+id/toolbar">
 
         <Button
-            android:id="@+id/saveButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Save"
-            android:textSize="10dp"/>
-
-        <Button
             android:id="@+id/insertButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -73,6 +65,14 @@
             android:textSize="10dp"/>
 
         <Button
+            android:id="@+id/undoButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Undo"
+            android:textSize="10dp"/>
+
+        <Button
             android:id="@+id/redoButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -89,17 +89,15 @@
             android:textSize="10dp"/>
     </LinearLayout>
 
-    <!--CANVAS-->
-    <com.example.paintcanvas.DrawingView
-        android:id="@+id/drawingCanvas"
+    <FrameLayout
+        android:id="@+id/drawView_frame"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@android:color/white"
         app:layout_constraintBottom_toTopOf="@+id/bottomCanvasBorder"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
-    </com.example.paintcanvas.DrawingView>
+    </FrameLayout>
 
     <TextView
         android:id="@+id/bottomCanvasBorder"
