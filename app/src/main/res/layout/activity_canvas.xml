@@ -21,9 +21,8 @@
         android:id="@+id/buttonToolsLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="2dp"
         android:layout_marginTop="2dp"
-        android:layout_marginEnd="2dp"
+        android:layout_marginEnd="150dp"
         android:layout_marginBottom="2dp"
         android:elevation="11dp"
         android:gravity="center"
@@ -38,8 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Menu"
-            android:textSize="10dp" />
+            android:background="@drawable/ic_menu_icon" />
 
         <Button
             android:id="@+id/sizeChooserButton"
@@ -49,6 +47,21 @@
             android:text="size"
             android:textSize="10dp" />
 
+
+        <Button
+            android:id="@+id/undoButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/ic_undo_icon" />
+
+        <Button
+            android:id="@+id/redoButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/ic_redo_icon" />
+
         <Button
             android:id="@+id/backgroundChooserButton"
             android:layout_width="wrap_content"
@@ -56,23 +69,6 @@
             android:layout_weight="1"
             android:text="backg"
             android:textSize="10dp" />
-
-        <Button
-            android:id="@+id/undoButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Undo"
-            android:textSize="10dp" />
-
-        <Button
-            android:id="@+id/redoButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="redo"
-            android:textSize="10dp" />
-
     </LinearLayout>
 
     <!-- The Drawing View-->
@@ -110,5 +106,21 @@
         app:layout_constraintStart_toStartOf="@+id/bottomCanvasBorder"
         app:layout_constraintTop_toTopOf="@+id/bottomCanvasBorder"
         app:srcCompat="@drawable/logo_secondary_nobg" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="2dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+        app:layout_constraintEnd_toEndOf="@+id/toolbar"
+        app:layout_constraintStart_toEndOf="@+id/buttonToolsLayout"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

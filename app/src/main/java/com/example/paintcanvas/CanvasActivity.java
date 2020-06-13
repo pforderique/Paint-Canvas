@@ -1,10 +1,12 @@
 package com.example.paintcanvas;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.widget.Toolbar;
 
 import android.graphics.Canvas;
 import android.os.Bundle;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
