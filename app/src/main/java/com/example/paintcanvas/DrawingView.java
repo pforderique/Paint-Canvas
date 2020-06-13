@@ -12,6 +12,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View.OnTouchListener;
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -101,20 +102,14 @@ public class DrawingView extends View implements OnTouchListener {
         if (paths.size()>0){
             undonePaths.add(paths.remove(paths.size()-1));
             invalidate(); //redraw on screen
-        }else{
-
-        }
-        //toast the user
+        }else{ Toast.makeText(getContext(), "no more undos", Toast.LENGTH_SHORT).show(); }
     }
 
     public void onClickRedo(){
         if (undonePaths.size()>0){
             paths.add(undonePaths.remove(undonePaths.size()-1));
             invalidate();
-        }else{
-
-        }
-        //toast the user
+        }else{ Toast.makeText(getContext(), "no more redos", Toast.LENGTH_SHORT).show(); }
     }
 
     public void onClickRestart(){
