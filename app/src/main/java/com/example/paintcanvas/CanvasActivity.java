@@ -2,10 +2,15 @@ package com.example.paintcanvas;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import android.graphics.Canvas;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.PopupMenu;
+import android.widget.Toast;
 
 public class CanvasActivity extends AppCompatActivity {
 
@@ -40,12 +45,33 @@ public class CanvasActivity extends AppCompatActivity {
                 drawView.onClickRedo();
             }
         });
-        //RESTART BUTTON
-        Button btn_restart = (Button) findViewById(R.id.restartButton);
-        btn_restart.setOnClickListener(new View.OnClickListener(){
+        //MENU BUTTON
+        Button btn_menu = (Button) findViewById(R.id.menuButton);
+        btn_menu.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                drawView.onClickRestart();
+                PopupMenu popup = new PopupMenu(CanvasActivity.this, v);
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch(item.getItemId()){
+                            case R.id.restartOption:
+                                drawView.onClickRestart();
+                                Toast.makeText(CanvasActivity.this,"New Canvas Started",Toast.LENGTH_SHORT).show();
+                                return true;
+                            case R.id.saveOption:
+                                Toast.makeText(CanvasActivity.this,"save clicked",Toast.LENGTH_SHORT).show();
+                                return true;
+                            case R.id.shareOption:
+                                Toast.makeText(CanvasActivity.this,"share clicked",Toast.LENGTH_SHORT).show();
+                                return true;
+                            default:
+                                return false;
+                        }
+                    }
+                });
+                popup.inflate(R.menu.popupmenu);
+                popup.show();
             }
         });
     }

@@ -18,43 +18,28 @@
         tools:ignore="MissingConstraints" />
 
     <LinearLayout
+        android:id="@+id/buttonToolsLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="2dp"
         android:layout_marginTop="2dp"
         android:layout_marginEnd="2dp"
         android:layout_marginBottom="2dp"
-        android:orientation="horizontal"
         android:elevation="11dp"
         android:gravity="center"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="@+id/toolbar"
         app:layout_constraintEnd_toEndOf="@+id/toolbar"
         app:layout_constraintStart_toStartOf="@+id/toolbar"
         app:layout_constraintTop_toTopOf="@+id/toolbar">
 
         <Button
-            android:id="@+id/restartButton"
+            android:id="@+id/menuButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Restart"
-            android:textSize="6dp"/>
-
-        <Button
-            android:id="@+id/insertButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Insert"
-            android:textSize="10dp"/>
-
-        <Button
-            android:id="@+id/colorChooserButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Color"
-            android:textSize="10dp"/>
+            android:text="Menu"
+            android:textSize="10dp" />
 
         <Button
             android:id="@+id/sizeChooserButton"
@@ -62,7 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="size"
-            android:textSize="10dp"/>
+            android:textSize="10dp" />
 
         <Button
             android:id="@+id/backgroundChooserButton"
@@ -70,7 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="backg"
-            android:textSize="10dp"/>
+            android:textSize="10dp" />
 
         <Button
             android:id="@+id/undoButton"
@@ -78,7 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Undo"
-            android:textSize="10dp"/>
+            android:textSize="10dp" />
 
         <Button
             android:id="@+id/redoButton"
@@ -86,7 +71,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="redo"
-            android:textSize="10dp"/>
+            android:textSize="10dp" />
+
     </LinearLayout>
 
     <!-- The Drawing View-->
@@ -94,6 +80,7 @@
         android:id="@+id/drawView_frame"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="@android:color/white"
         app:layout_constraintBottom_toTopOf="@+id/bottomCanvasBorder"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
