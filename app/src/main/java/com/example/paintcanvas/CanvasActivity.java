@@ -31,7 +31,7 @@ import yuku.ambilwarna.AmbilWarnaDialog;
 
 public class CanvasActivity extends AppCompatActivity {
     DrawingView drawView;
-    int pensizeVal = 6;
+    int pensizeVal = 5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,15 +146,19 @@ public class CanvasActivity extends AppCompatActivity {
         try {
             LayoutInflater inflater = (LayoutInflater) CanvasActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             final View layout = inflater.inflate(R.layout.pensize_popup, (ViewGroup) findViewById(R.id.popupElement));
-            PopupWindow pwindo = new PopupWindow(layout, 800, 600, true);
+            PopupWindow pwindo = new PopupWindow(layout, 800, 300, true);
             pwindo.showAtLocation(layout, Gravity.CENTER, 0, 0);
 
+            final TextView pensize_tv = (TextView) layout.findViewById(R.id.pensizeTxtView);
             SeekBar pensize_sb = (SeekBar) layout.findViewById(R.id.seekBar);
+
+            pensize_tv.setText("Pen Size: " + pensizeVal + "px"); //changes text view to whatever last pensize val was on new popup instance
+            pensize_sb.setProgress(pensizeVal); //changes progress value too to current pensize val
+
             pensize_sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     pensizeVal = seekBar.getProgress();
-                    TextView pensize_tv = (TextView) layout.findViewById(R.id.pensizeTxtView);
                     pensize_tv.setText("Pen Size: " + pensizeVal + "px");
                     drawView.setStrokeWidth(pensizeVal*5);
                     Log.i("being dragged", "dragging...");
