@@ -2,15 +2,12 @@ package com.example.paintcanvas;
 /**TODO:
  * Find why one path is being drawn at the start - this might be the reason for undo button taking one more initially to actually start undoing
  * Fix color not changing until after path is drawn when a new color has just been selected (works fine after initial path after color change is drawn)*/
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View.OnTouchListener;
