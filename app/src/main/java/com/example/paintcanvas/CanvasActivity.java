@@ -3,27 +3,41 @@ package com.example.paintcanvas;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
+import android.widget.PopupWindow;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import yuku.ambilwarna.AmbilWarnaDialog;
 
 public class CanvasActivity extends AppCompatActivity {
+    DrawingView drawView;
+    int pensizeVal = 6;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_canvas);
-
+        Log.i("Running", "Running...");
         //sets up color display text view next to palette - how to change element's background
         TextView color_txt_view = (TextView) findViewById(R.id.colorDispView);
         final GradientDrawable color_disp = (GradientDrawable) color_txt_view.getBackground();
@@ -34,9 +48,19 @@ public class CanvasActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         //drawing view setup
-        final DrawingView drawView = new DrawingView(this);
+        drawView = new DrawingView(this);
         final FrameLayout frm_layout = (FrameLayout) findViewById(R.id.drawView_frame);
         frm_layout.addView(drawView);
+
+        //PENSIZE BUTTON
+        Button btn_pensize = (Button) findViewById(R.id.sizeChooserButton);
+        btn_pensize.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initializePopUpWindow();
+            }
+        });
+
 
         //UNDO BUTTON
         Button btn_undo = (Button) findViewById(R.id.undoButton);
@@ -119,5 +143,34 @@ public class CanvasActivity extends AppCompatActivity {
                 dialog.show();
             }
         });
+    }
+
+    public void initializePopUpWindow(){
+        try {
+            LayoutInflater inflater = (LayoutInflater) CanvasActivity.this
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            final View layout = inflater.inflate(R.layout.pensize_popup,
+                    (ViewGroup) findViewById(R.id.popupElement));
+            PopupWindow pwindo = new PopupWindow(layout, 1000, 400, true);
+            pwindo.showAtLocation(layout, Gravity.CENTER, 0, 0);
+
+            SeekBar pensize_sb = (SeekBar) layout.findViewById(R.id.seekBar);
+            pensize_sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    pensizeVal = seekBar.getProgress();
+                    TextView pensize_tv = (TextView) layout.findViewById(R.id.pensizeTxtView);
+                    pensize_tv.setText("Pen Size: " + pensizeVal + "px");
+                    drawView.setStrokeWidth(pensizeVal);
+                    Log.i("being dragged", "dragging...");
+                }
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) { }
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) { }
+            });
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

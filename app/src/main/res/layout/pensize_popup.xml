@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/popupElement"
+    android:orientation="vertical"
+    android:layout_width="270dp"
+    android:layout_height="150dp"
+    android:background="@drawable/popup_box"
+    android:layout_gravity="center">
+
+
+    <TextView
+        android:id="@+id/pensizeTxtView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        android:text="Pen Size: 6px" />
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp"
+        android:foregroundGravity="center"
+        android:max="50"
+        android:min="0"
+        android:progress="6"
+        android:progressBackgroundTint="@color/colorAccent"
+        android:progressDrawable="@drawable/seekbar_progress_style"
+        android:thumb="@drawable/seekbar_thumb" />
+
+</LinearLayout>

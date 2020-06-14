@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@android:id/background"
+        android:drawable="@drawable/seekbar_track"
+        android:height="6dp"
+        android:top="4dp">
+    </item>
+<!--This android:height ACTUALLY changes the height as it appears on popup-->
+    <item
+        android:id="@android:id/progress"
+        android:height="4dp"
+        android:top="5dp">
+        <clip android:drawable="@drawable/progress_bar"/>
+    </item>
+</layer-list>
