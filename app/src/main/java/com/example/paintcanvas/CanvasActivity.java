@@ -3,6 +3,7 @@ package com.example.paintcanvas;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
@@ -24,7 +25,7 @@ public class CanvasActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_canvas);
 
-        //sets up color display view next to palette
+        //sets up color display text view next to palette - how to change element's background
         TextView color_txt_view = (TextView) findViewById(R.id.colorDispView);
         final GradientDrawable color_disp = (GradientDrawable) color_txt_view.getBackground();
 
@@ -35,7 +36,7 @@ public class CanvasActivity extends AppCompatActivity {
 
         //drawing view setup
         final DrawingView drawView = new DrawingView(this);
-        FrameLayout frm_layout = (FrameLayout) findViewById(R.id.drawView_frame);
+        final FrameLayout frm_layout = (FrameLayout) findViewById(R.id.drawView_frame);
         frm_layout.addView(drawView);
 
         //UNDO BUTTON
@@ -101,7 +102,23 @@ public class CanvasActivity extends AppCompatActivity {
                 dialog.show();
             }
         });
-        //BACKGROUND COLOR
-
+        //BACKGROUND COLOR BUTTON
+        final int[] backgroundColor = {Color.BLACK}; //keeps track of bgColor for when ambilwarnadialog appears
+        Button btn_bgcolor = (Button) findViewById(R.id.backgroundChooserButton);
+        btn_bgcolor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AmbilWarnaDialog dialog = new AmbilWarnaDialog(CanvasActivity.this, backgroundColor[0], new AmbilWarnaDialog.OnAmbilWarnaListener() {
+                        @Override
+                    public void onOk(AmbilWarnaDialog dialog, int color) {
+                        backgroundColor[0] = color;
+                        frm_layout.setBackgroundColor(color);
+                    }
+                    @Override
+                    public void onCancel(AmbilWarnaDialog dialog) { }
+                });
+                dialog.show();
+            }
+        });
     }
 }
