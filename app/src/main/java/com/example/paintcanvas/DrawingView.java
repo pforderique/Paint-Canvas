@@ -21,23 +21,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class DrawingView extends View implements OnTouchListener {
-    //setup canvas
+    //setup canvas, initial color, paint obj, path obj
     private Canvas mCanvas;
-    // setup initial color
     private int paintColor = Color.BLACK;
-    // defines paint and canvas
     private Paint mPaint;
-    //Lets us draw in paths
     private Path mPath = new Path();
     //Stores the paths in an arraylist for undoing and redoing
     private ArrayList<Path> paths = new ArrayList<Path>();
     private ArrayList<Path> undonePaths = new ArrayList<Path>();
+    //HashMap for storing Path colors in a dictionary
+    private HashMap<Path,Integer> colorMap;
     //Bitmap for caching
     private Bitmap bitmap;
-    //HashMap for storing Path colors
-    private HashMap<Path,Integer> colorMap;
 
-    @SuppressLint("ClickableViewAccessibility")
     public DrawingView(Context context) {
         super(context);
         setFocusable(true);
@@ -45,7 +41,6 @@ public class DrawingView extends View implements OnTouchListener {
         this.setOnTouchListener(this);
         mCanvas = new Canvas();
         mPath = new Path();
-        paths.add(mPath);
         colorMap = new HashMap<>();
         setupPaint();
 //        im = BitmapFactory.decodeResource(context.getResources(),R.drawable.ic_launcher_background);
@@ -67,18 +62,17 @@ public class DrawingView extends View implements OnTouchListener {
         super.onSizeChanged(w, h, oldw, oldh);
     }
 
-    // Draw each circle onto the view
     @Override
     protected void onDraw(Canvas canvas) {
-        Log.i("OnDRAWING",""+paths.size());
-        if(paths.size()>1) {
-            for (Path p : paths) {
-                mPaint.setColor(colorMap.get(p));
-                canvas.drawPath(p, mPaint);
-            }
+        Log.i("Number of Paths",""+paths.size());
+        //draws past paths
+        for (Path p : paths) {
+            mPaint.setColor(colorMap.get(p));
+            canvas.drawPath(p, mPaint);
         }
-        canvas.drawPath(mPath, mPaint); //added
+        //draws current path
         mPaint.setColor(paintColor);
+        canvas.drawPath(mPath, mPaint);
     }
 
     private float mX, mY;
@@ -106,11 +100,11 @@ public class DrawingView extends View implements OnTouchListener {
         mPath.lineTo(mX, mY);
         // commit the path to our offscreen
         mCanvas.drawPath(mPath, mPaint);
-        // kill this so we don't double draw
-//        mPath = new Path();
+        //Add current path to paths list and color hashmap + log it
         paths.add(mPath);
-        colorMap.put(mPath,mPaint.getColor());
-        Log.i("hashmap",colorMap.toString());
+        colorMap.put(mPath, mPaint.getColor());
+        Log.i("hashmap", colorMap.toString());
+        // kill this so we don't double draw
         mPath = new Path();
         mPath.reset();
     }
@@ -163,4 +157,6 @@ public class DrawingView extends View implements OnTouchListener {
         paintColor = color;
         mPaint.setColor(color);
     }
+    public float getStrokeWidth(){ return mPaint.getStrokeWidth(); }
+    public void setStrokeWidth(float sw){ mPaint.setStrokeWidth(sw);}
 }
