@@ -3,7 +3,8 @@ package com.example.paintcanvas;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,9 +12,8 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import yuku.ambilwarna.AmbilWarnaDialog;
 
@@ -23,6 +23,10 @@ public class CanvasActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_canvas);
+
+        //sets up color display view next to palette
+        TextView color_txt_view = (TextView) findViewById(R.id.colorDispView);
+        final GradientDrawable color_disp = (GradientDrawable) color_txt_view.getBackground();
 
         //Sets tool bar up without a title!
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -89,14 +93,15 @@ public class CanvasActivity extends AppCompatActivity {
                     public void onOk(AmbilWarnaDialog dialog, int color) {
                         // color is the color selected by the user.
                         drawView.setPaintColor(color);
+                        color_disp.setColor(color);
                     }
                     @Override
-                    public void onCancel(AmbilWarnaDialog dialog) {
-                        // cancel was selected by the user
-                    }
+                    public void onCancel(AmbilWarnaDialog dialog) { }
                 });
                 dialog.show();
             }
         });
+        //BACKGROUND COLOR
+
     }
 }
