@@ -18,7 +18,7 @@
         android:textStyle="bold"
         android:textColor="@android:color/white"
         android:textSize="16sp"
-        android:text="Pen Size: 6px" />
+        android:text="@string/pen_size_text_on_popup" />
 
     <SeekBar
         android:id="@+id/seekBar"
@@ -28,9 +28,9 @@
         android:layout_marginTop="10dp"
         android:layout_marginRight="20dp"
         android:foregroundGravity="center"
-        android:max="50"
-        android:min="0"
-        android:progress="6"
+        android:max="30"
+        android:min="1"
+        android:progress="10"
         android:progressBackgroundTint="@color/colorAccent"
         android:progressDrawable="@drawable/seekbar_progress_style"
         android:thumb="@drawable/seekbar_thumb" />

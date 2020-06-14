@@ -56,11 +56,8 @@ public class CanvasActivity extends AppCompatActivity {
         Button btn_pensize = (Button) findViewById(R.id.sizeChooserButton);
         btn_pensize.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                initializePopUpWindow();
-            }
+            public void onClick(View v) { initializePopUpWindow(); }
         });
-
 
         //UNDO BUTTON
         Button btn_undo = (Button) findViewById(R.id.undoButton);
@@ -126,7 +123,7 @@ public class CanvasActivity extends AppCompatActivity {
             }
         });
         //BACKGROUND COLOR BUTTON
-        final int[] backgroundColor = {Color.BLACK}; //keeps track of bgColor for when ambilwarnadialog appears
+        final int[] backgroundColor = {Color.WHITE}; //keeps track of bgColor for when ambilwarnadialog appears
         Button btn_bgcolor = (Button) findViewById(R.id.backgroundChooserButton);
         btn_bgcolor.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,11 +144,9 @@ public class CanvasActivity extends AppCompatActivity {
 
     public void initializePopUpWindow(){
         try {
-            LayoutInflater inflater = (LayoutInflater) CanvasActivity.this
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            final View layout = inflater.inflate(R.layout.pensize_popup,
-                    (ViewGroup) findViewById(R.id.popupElement));
-            PopupWindow pwindo = new PopupWindow(layout, 1000, 400, true);
+            LayoutInflater inflater = (LayoutInflater) CanvasActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            final View layout = inflater.inflate(R.layout.pensize_popup, (ViewGroup) findViewById(R.id.popupElement));
+            PopupWindow pwindo = new PopupWindow(layout, 800, 600, true);
             pwindo.showAtLocation(layout, Gravity.CENTER, 0, 0);
 
             SeekBar pensize_sb = (SeekBar) layout.findViewById(R.id.seekBar);
@@ -161,7 +156,7 @@ public class CanvasActivity extends AppCompatActivity {
                     pensizeVal = seekBar.getProgress();
                     TextView pensize_tv = (TextView) layout.findViewById(R.id.pensizeTxtView);
                     pensize_tv.setText("Pen Size: " + pensizeVal + "px");
-                    drawView.setStrokeWidth(pensizeVal);
+                    drawView.setStrokeWidth(pensizeVal*5);
                     Log.i("being dragged", "dragging...");
                 }
                 @Override

@@ -21,14 +21,14 @@ public class DrawingView extends View implements OnTouchListener {
     //setup canvas, initial color, paint obj, path obj
     private Canvas mCanvas;
     private int paintColor = Color.BLACK;
-    private float strokeWidth = 6;
+    private float strokeWidth = 10;
     private Paint mPaint;
     private Path mPath = new Path();
     //Stores the paths in an arraylist for undoing and redoing
     private ArrayList<Path> paths = new ArrayList<Path>();
     private ArrayList<Path> undonePaths = new ArrayList<Path>();
     //HashMap for storing Path colors in a dictionary
-    private HashMap<Path,Stroke> strokeMap;
+    private HashMap<Path, Stroke> strokeMap;
     //Bitmap for caching
     private Bitmap bitmap;
 
@@ -86,7 +86,6 @@ public class DrawingView extends View implements OnTouchListener {
         mX = x;
         mY = y;
     }
-
     private void touch_move(float x, float y) {
         float dx = Math.abs(x - mX);
         float dy = Math.abs(y - mY);
@@ -96,7 +95,6 @@ public class DrawingView extends View implements OnTouchListener {
             mY = y;
         }
     }
-
     private void touch_up() {
         mPath.lineTo(mX, mY);
         // commit the path to our offscreen

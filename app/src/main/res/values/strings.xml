@@ -2,4 +2,5 @@
     <string name="app_name">Paint Canvas</string>
     <string name="logoAppTextImageDescription">Logo Text Image</string>
     <string name="testingButtonSize">9dp</string>
+    <string name="pen_size_text_on_popup" id="yes">Pen Size: 10px</string>
 </resources>
