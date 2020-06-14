@@ -14,39 +14,40 @@
         android:background="@color/colorOrderiqueLogoBg"
         android:elevation="10dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         tools:ignore="MissingConstraints" />
 
     <LinearLayout
         android:id="@+id/buttonToolsLayout"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="269dp"
+        android:layout_height="46dp"
         android:layout_marginTop="2dp"
-        android:layout_marginEnd="150dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginBottom="2dp"
         android:elevation="11dp"
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="@+id/toolbar"
-        app:layout_constraintEnd_toEndOf="@+id/toolbar"
-        app:layout_constraintStart_toStartOf="@+id/toolbar"
+        app:layout_constraintEnd_toStartOf="@+id/colorLayout"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/toolbar">
 
         <Button
             android:id="@+id/menuButton"
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/ic_menu_icon" />
 
         <Button
-            android:id="@+id/sizeChooserButton"
+            android:id="@+id/backgroundChooserButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="size"
-            android:textSize="10dp" />
-
+            android:background="@drawable/ic_smartphone_bg_icon" />
 
         <Button
             android:id="@+id/undoButton"
@@ -63,12 +64,11 @@
             android:background="@drawable/ic_redo_icon" />
 
         <Button
-            android:id="@+id/backgroundChooserButton"
+            android:id="@+id/sizeChooserButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="backg"
-            android:textSize="10dp" />
+            android:background="@drawable/ic_pen_size_icon" />
     </LinearLayout>
 
     <!-- The Drawing View-->
@@ -77,6 +77,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@android:color/white"
+        android:elevation="12dp"
         app:layout_constraintBottom_toTopOf="@+id/bottomCanvasBorder"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -108,19 +109,37 @@
         app:srcCompat="@drawable/logo_secondary_nobg" />
 
     <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="2dp"
+        android:id="@+id/colorLayout"
+        android:layout_width="104dp"
+        android:layout_height="57dp"
         android:layout_marginTop="2dp"
-        android:layout_marginEnd="2dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginBottom="2dp"
+        android:elevation="12dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="@+id/toolbar"
         app:layout_constraintEnd_toEndOf="@+id/toolbar"
         app:layout_constraintStart_toEndOf="@+id/buttonToolsLayout"
         app:layout_constraintTop_toTopOf="parent">
 
+        <ImageButton
+            android:id="@+id/paletteButton"
+            android:layout_width="24dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center"
+            android:layout_margin="4dp"
+            android:layout_weight="1"
+            android:background="@drawable/pallete_nobg" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="5dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1"
+            android:background="@drawable/color_display_box"
+            android:gravity="center"
+            app:layout_constraintTop_toTopOf="parent" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
