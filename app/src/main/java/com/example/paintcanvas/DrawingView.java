@@ -21,13 +21,14 @@ public class DrawingView extends View implements OnTouchListener {
     //setup canvas, initial color, paint obj, path obj
     private Canvas mCanvas;
     private int paintColor = Color.BLACK;
+    private float strokeWidth = 10;
     private Paint mPaint;
     private Path mPath = new Path();
     //Stores the paths in an arraylist for undoing and redoing
     private ArrayList<Path> paths = new ArrayList<Path>();
     private ArrayList<Path> undonePaths = new ArrayList<Path>();
     //HashMap for storing Path colors in a dictionary
-    private HashMap<Path,Integer> colorMap;
+    private HashMap<Path, Stroke> strokeMap;
     //Bitmap for caching
     private Bitmap bitmap;
 
@@ -38,7 +39,7 @@ public class DrawingView extends View implements OnTouchListener {
         this.setOnTouchListener(this);
         mCanvas = new Canvas();
         mPath = new Path();
-        colorMap = new HashMap<>();
+        strokeMap = new HashMap<>();
         setupPaint();
 //        im = BitmapFactory.decodeResource(context.getResources(),R.drawable.ic_launcher_background);
     }
@@ -48,7 +49,7 @@ public class DrawingView extends View implements OnTouchListener {
         mPaint.setColor(paintColor);
         mPaint.setAntiAlias(true); //rounds off drawings
         mPaint.setDither(true); //downsizes colors on devices that cant handle precision
-        mPaint.setStrokeWidth(6);
+        mPaint.setStrokeWidth(strokeWidth);
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
@@ -64,11 +65,13 @@ public class DrawingView extends View implements OnTouchListener {
         Log.i("Number of Paths",""+paths.size());
         //draws past paths
         for (Path p : paths) {
-            mPaint.setColor(colorMap.get(p));
+            mPaint.setColor(strokeMap.get(p).getStrokeColor());
+            mPaint.setStrokeWidth(strokeMap.get(p).getStrokeWidth());
             canvas.drawPath(p, mPaint);
         }
         //draws current path
         mPaint.setColor(paintColor);
+        mPaint.setStrokeWidth(strokeWidth);
         canvas.drawPath(mPath, mPaint);
     }
 
@@ -77,12 +80,12 @@ public class DrawingView extends View implements OnTouchListener {
 
     private void touch_start(float x, float y) {
         mPaint.setColor(paintColor);
+        mPaint.setStrokeWidth(strokeWidth);
         mPath.reset();
         mPath.moveTo(x, y);
         mX = x;
         mY = y;
     }
-
     private void touch_move(float x, float y) {
         float dx = Math.abs(x - mX);
         float dy = Math.abs(y - mY);
@@ -92,15 +95,14 @@ public class DrawingView extends View implements OnTouchListener {
             mY = y;
         }
     }
-
     private void touch_up() {
         mPath.lineTo(mX, mY);
         // commit the path to our offscreen
         mCanvas.drawPath(mPath, mPaint);
         //Add current path to paths list and color hashmap + log it
         paths.add(mPath);
-        colorMap.put(mPath, mPaint.getColor());
-        Log.i("hashmap", colorMap.toString());
+        strokeMap.put(mPath, new Stroke(mPaint.getColor(),mPaint.getStrokeWidth()));
+        Log.i("hashmap", strokeMap.toString());
         // kill this so we don't double draw
         mPath = new Path();
         mPath.reset();
@@ -112,14 +114,12 @@ public class DrawingView extends View implements OnTouchListener {
             invalidate(); //redraw on screen
         }else{ Toast.makeText(getContext(), "no more undos", Toast.LENGTH_SHORT).show(); }
     }
-
     public void onClickRedo(){
         if (undonePaths.size()>0){
             paths.add(undonePaths.remove(undonePaths.size()-1));
             invalidate();
         }else{ Toast.makeText(getContext(), "no more redos", Toast.LENGTH_SHORT).show(); }
     }
-
     public void onClickRestart(){
         paths.clear();
         undonePaths.clear();
@@ -147,6 +147,7 @@ public class DrawingView extends View implements OnTouchListener {
         }
         return true;
     }
+
     public int getPaintColor(){
         return mPaint.getColor();
     }
@@ -155,5 +156,7 @@ public class DrawingView extends View implements OnTouchListener {
         mPaint.setColor(color);
     }
     public float getStrokeWidth(){ return mPaint.getStrokeWidth(); }
-    public void setStrokeWidth(float sw){ mPaint.setStrokeWidth(sw);}
+    public void setStrokeWidth(float sw){
+        strokeWidth = sw;
+        mPaint.setStrokeWidth(sw);}
 }

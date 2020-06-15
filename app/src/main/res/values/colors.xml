@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">#001E5A</color>
     <color name="colorAccent">#F3B02C</color>
     <color name="colorOrderiqueLogoBg">#203864</color>
+    <color name="colorAccentFaded">#D3FFE3AC</color>
 </resources>
