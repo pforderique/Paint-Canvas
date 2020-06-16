@@ -3,13 +3,17 @@ package com.example.paintcanvas;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -19,17 +23,22 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.PopupWindow;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.Date;
+import java.util.Random;
 
 import yuku.ambilwarna.AmbilWarnaDialog;
 
 public class CanvasActivity extends AppCompatActivity {
+    FrameLayout frm_layout;
     DrawingView drawView;
     int pensizeVal = 5;
 
@@ -47,9 +56,9 @@ public class CanvasActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        //drawing view setup
+        //drawing view and frame layout setup
         drawView = new DrawingView(this);
-        final FrameLayout frm_layout = (FrameLayout) findViewById(R.id.drawView_frame);
+        frm_layout = (FrameLayout) findViewById(R.id.drawView_frame);
         frm_layout.addView(drawView);
 
         //PENSIZE BUTTON
@@ -90,6 +99,11 @@ public class CanvasActivity extends AppCompatActivity {
                                 Toast.makeText(CanvasActivity.this, "New Canvas Started", Toast.LENGTH_SHORT).show();
                                 return true;
                             case R.id.saveOption:
+                                ImageView imgView = (ImageView) findViewById(R.id.screenShotView);
+//                                Bitmap b = Screenshot.takescreenshotOfRootView(imgView);
+//                                imgView.setImageBitmap(b);
+
+                                frm_layout.setBackgroundColor(Color.parseColor("#999999")); //added for screenshot
                                 Toast.makeText(CanvasActivity.this, "save clicked", Toast.LENGTH_SHORT).show();
                                 return true;
                             case R.id.shareOption:
@@ -141,7 +155,6 @@ public class CanvasActivity extends AppCompatActivity {
             }
         });
     }
-
     public void initializePopUpWindow(){
         try {
             LayoutInflater inflater = (LayoutInflater) CanvasActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -171,5 +184,70 @@ public class CanvasActivity extends AppCompatActivity {
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    private void saveImage(Bitmap finalBitmap, String image_name) {
+        String root = Environment.getExternalStorageDirectory().toString();
+        File myDir = new File(root);
+        myDir.mkdirs();
+        String fname = "/Image-" + image_name+ ".jpg";
+        File file = new File(myDir, fname);
+        if (file.exists()) file.delete();
+        Log.i("LOAD", root + fname);
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    private void saveImageToGallery( String title, String description){
+        drawView.setDrawingCacheEnabled(true);
+        Bitmap b = drawView.getDrawingCache();
+        MediaStore.Images.Media.insertImage(getContentResolver(), b,title, description);
+    }
+    private void SaveImage(Bitmap finalBitmap) {
+        String root = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES).toString();
+        File myDir = new File(root + "/PaintCanvasDrawings");
+        myDir.mkdirs();
+        Random generator = new Random();
+
+        int n = 10000;
+        n = generator.nextInt(n);
+        String fname = "Image-"+ n +".jpg";
+        File file = new File (myDir, fname);
+        if (file.exists ()) file.delete ();
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            // sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,
+            //     Uri.parse("file://"+ Environment.getExternalStorageDirectory())));
+            out.flush();
+            out.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // Tell the media scanner about the new file so that it is
+        // immediately available to the user.
+        MediaScannerConnection.scanFile(this, new String[]{file.toString()}, null,
+                new MediaScannerConnection.OnScanCompletedListener() {
+                    public void onScanCompleted(String path, Uri uri) {
+                        Log.i("ExternalStorage", "Scanned " + path + ":");
+                        Log.i("ExternalStorage", "-> uri=" + uri);
+                    }
+                });
+    }
+
+    public void screenShot(View view) {
+        Bitmap bitmap = Bitmap.createBitmap(view.getWidth(),
+                view.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        view.draw(canvas);
+//        screenShot.setImageBitmap(bitmap);
+//        textView.setText("click");
     }
 }
