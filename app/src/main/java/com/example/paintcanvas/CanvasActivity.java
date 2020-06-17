@@ -5,16 +5,19 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -42,6 +45,7 @@ public class CanvasActivity extends AppCompatActivity {
     FrameLayout frm_layout;
     DrawingView drawView;
     FileOutputStream out;
+    String menuOptionSelected;
     int STORAGE_PERMISSION_CODE = 1; //to identify our request
     int pensizeVal = 5;
 
@@ -99,6 +103,7 @@ public class CanvasActivity extends AppCompatActivity {
                                 Toast.makeText(CanvasActivity.this, "New Canvas Started", Toast.LENGTH_SHORT).show();
                                 return true;
                             case R.id.saveOption:
+                                menuOptionSelected = "saveOption";
                                 //check if permission has already been granted. If not, request permission
                                 if (ContextCompat.checkSelfPermission(CanvasActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                                         == PackageManager.PERMISSION_GRANTED) { saveImage(screenshotAsBitmap(frm_layout)); }
@@ -106,7 +111,12 @@ public class CanvasActivity extends AppCompatActivity {
                                 Toast.makeText(CanvasActivity.this, "Canvas Saved", Toast.LENGTH_SHORT).show();
                                 return true;
                             case R.id.shareOption:
-                                Toast.makeText(CanvasActivity.this, "share clicked", Toast.LENGTH_SHORT).show();
+                                menuOptionSelected = "shareOption";
+                                //check if permission has already been granted. If not, request permission
+                                if (ContextCompat.checkSelfPermission(CanvasActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                        == PackageManager.PERMISSION_GRANTED) { shareImageFile(saveImage(screenshotAsBitmap(frm_layout))); }
+                                else { requestStorageAccessPermission();}
+                                Toast.makeText(CanvasActivity.this, "Share Options", Toast.LENGTH_SHORT).show();
                                 return true;
                             default:
                                 return false;
@@ -217,7 +227,10 @@ public class CanvasActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if(requestCode == STORAGE_PERMISSION_CODE){
             if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                saveImage(screenshotAsBitmap(frm_layout));
+                //if user says yes to request, act appropriately based on if they are sharing or only saving image.
+                if(menuOptionSelected.equals("saveOption")) { saveImage(screenshotAsBitmap(frm_layout)); }
+                else if (menuOptionSelected.equals("shareOption")){ shareImageFile(saveImage(screenshotAsBitmap(frm_layout))); }
+                else { Toast.makeText(this, "Error Sharing/Saving Drawing",Toast.LENGTH_SHORT); }
                 Toast.makeText(this, "Permission GRANTED",Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, "Permission NOT GRANTED",Toast.LENGTH_SHORT).show();
@@ -234,20 +247,35 @@ public class CanvasActivity extends AppCompatActivity {
     }
 
     //saves image to gallery
-    private void saveImage(Bitmap finalBitmap) {
+    private File saveImage(Bitmap finalBitmap) {
         //Establishes the path to image and makes the directories needed
         String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/Pictures/PaintCanvas/";
         File root = new File(rootPath);
         root.mkdirs();
         //Creates file location and compresses image there
-        String fileName = "myPaintCanvasPic"+System.currentTimeMillis()+".jpg";
+        String fileName = "PaintCanvasDrawing"+System.currentTimeMillis()+".jpg";
         File imgFile = new File(root, fileName).getAbsoluteFile();
-        Log.i("Loaded", root.getAbsolutePath() + fileName);
+        Log.i("Loaded", root.getAbsolutePath()+"/"+fileName);
         try { out = new FileOutputStream(imgFile); }
         catch (Exception e) { e.printStackTrace(); }
         finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
         try { out.flush(); out.close(); } catch (IOException e) { e.printStackTrace(); }
         //Needed so that it is shown in Gallery
         MediaScannerConnection.scanFile(this, new String[] { imgFile.getPath() }, new String[] { "image/jpeg" }, null);
+        return imgFile;
+    }
+
+    //saves image from file and shares image
+    private void shareImageFile(File file){
+        Uri uri = FileProvider.getUriForFile(this,this.getApplicationContext().getPackageName() + ".provider", file);
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_SEND);
+        intent.setType("image/*");
+
+        intent.putExtra(android.content.Intent.EXTRA_SUBJECT, "");
+        intent.putExtra(android.content.Intent.EXTRA_TEXT, "");
+
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+        startActivity(Intent.createChooser(intent, "Share Cover Image"));
     }
 }
