@@ -80,13 +80,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/topCanvasBorder"
         tools:ignore="HardcodedText">
-
-        <ImageView
-            android:id="@+id/screenShotView"
-            android:layout_width="291dp"
-            android:layout_height="457dp"
-            android:elevation="30dp"
-            android:contentDescription="where screen shot goes" />
     </FrameLayout>
 
     <TextView
