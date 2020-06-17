@@ -147,7 +147,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="50dp"
         app:adSize="BANNER"
-        app:adUnitId="ca-app-pub-3940256099942544/6300978111"
+        app:adUnitId="ca-app-pub-8180145895507739/5096479746"
         app:layout_constraintBottom_toBottomOf="@+id/bottomCanvasBorder"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
