@@ -40,6 +40,7 @@ import yuku.ambilwarna.AmbilWarnaDialog;
 public class CanvasActivity extends AppCompatActivity {
     FrameLayout frm_layout;
     DrawingView drawView;
+    ImageView imgView;
     int pensizeVal = 5;
 
     @Override
@@ -99,10 +100,10 @@ public class CanvasActivity extends AppCompatActivity {
                                 Toast.makeText(CanvasActivity.this, "New Canvas Started", Toast.LENGTH_SHORT).show();
                                 return true;
                             case R.id.saveOption:
-                                ImageView imgView = (ImageView) findViewById(R.id.screenShotView);
+                                imgView = (ImageView) findViewById(R.id.screenShotView);
 //                                Bitmap b = Screenshot.takescreenshotOfRootView(imgView);
 //                                imgView.setImageBitmap(b);
-
+                                screenShot(frm_layout);
                                 frm_layout.setBackgroundColor(Color.parseColor("#999999")); //added for screenshot
                                 Toast.makeText(CanvasActivity.this, "save clicked", Toast.LENGTH_SHORT).show();
                                 return true;
@@ -155,6 +156,7 @@ public class CanvasActivity extends AppCompatActivity {
             }
         });
     }
+    //method for changing pen size from popup and displaying correspondingly
     public void initializePopUpWindow(){
         try {
             LayoutInflater inflater = (LayoutInflater) CanvasActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -242,12 +244,11 @@ public class CanvasActivity extends AppCompatActivity {
                 });
     }
 
+    //Takes screenshot of view based on its dimensions
     public void screenShot(View view) {
-        Bitmap bitmap = Bitmap.createBitmap(view.getWidth(),
-                view.getHeight(), Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         view.draw(canvas);
-//        screenShot.setImageBitmap(bitmap);
-//        textView.setText("click");
+        imgView.setImageBitmap(bitmap); //for testing purposes!
     }
 }
