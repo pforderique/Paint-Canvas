@@ -5,6 +5,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
 import android.Manifest;
 import android.content.Context;
@@ -252,9 +253,9 @@ public class CanvasActivity extends AppCompatActivity {
         File root = new File(rootPath);
         root.mkdirs();
         //Creates file location and compresses image there
-        String fileName = "myPaintCanvasPic"+System.currentTimeMillis()+".jpg";
+        String fileName = "PaintCanvasDrawing"+System.currentTimeMillis()+".jpg";
         File imgFile = new File(root, fileName).getAbsoluteFile();
-        Log.i("Loaded", root.getAbsolutePath() + fileName);
+        Log.i("Loaded", root.getAbsolutePath()+"/"+fileName);
         try { out = new FileOutputStream(imgFile); }
         catch (Exception e) { e.printStackTrace(); }
         finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
@@ -266,7 +267,7 @@ public class CanvasActivity extends AppCompatActivity {
 
     //saves image from file and shares image
     private void shareImageFile(File file){
-        Uri uri = Uri.fromFile(file);
+        Uri uri = FileProvider.getUriForFile(this,this.getApplicationContext().getPackageName() + ".provider", file);
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND);
         intent.setType("image/*");
