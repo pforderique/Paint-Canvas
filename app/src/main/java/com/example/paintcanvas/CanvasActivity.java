@@ -1,10 +1,17 @@
 package com.example.paintcanvas;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -13,6 +20,7 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
@@ -32,6 +40,7 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Date;
 import java.util.Random;
 
@@ -41,6 +50,8 @@ public class CanvasActivity extends AppCompatActivity {
     FrameLayout frm_layout;
     DrawingView drawView;
     ImageView imgView;
+    FileOutputStream out;
+    int STORAGE_PERMISSION_CODE = 1; //to identify our request
     int pensizeVal = 5;
 
     @Override
@@ -52,10 +63,10 @@ public class CanvasActivity extends AppCompatActivity {
         TextView color_txt_view = (TextView) findViewById(R.id.colorDispView);
         final GradientDrawable color_disp = (GradientDrawable) color_txt_view.getBackground();
 
-        //Sets tool bar up without a title!
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(myToolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+//        //Sets tool bar up without a title!
+//        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(myToolbar);
+//        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         //drawing view and frame layout setup
         drawView = new DrawingView(this);
@@ -103,7 +114,13 @@ public class CanvasActivity extends AppCompatActivity {
                                 imgView = (ImageView) findViewById(R.id.screenShotView);
 //                                Bitmap b = Screenshot.takescreenshotOfRootView(imgView);
 //                                imgView.setImageBitmap(b);
-                                screenShot(frm_layout);
+//                                screenShot(frm_layout);
+                                //check if permission has already been granted. If not, request permission
+                                if (ContextCompat.checkSelfPermission(CanvasActivity.this,
+                                        Manifest.permission.WRITE_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED) {
+                                    saveImage(screenshotAsBitmap(frm_layout));
+                                    Toast.makeText(CanvasActivity.this, "Permission Already Granted", Toast.LENGTH_SHORT).show();
+                                } else { requestStorageAccessPermission();}
                                 frm_layout.setBackgroundColor(Color.parseColor("#999999")); //added for screenshot
                                 Toast.makeText(CanvasActivity.this, "save clicked", Toast.LENGTH_SHORT).show();
                                 return true;
@@ -188,22 +205,37 @@ public class CanvasActivity extends AppCompatActivity {
         }
     }
 
-    private void saveImage(Bitmap finalBitmap, String image_name) {
-        String root = Environment.getExternalStorageDirectory().toString();
-        File myDir = new File(root);
-        myDir.mkdirs();
-        String fname = "/Image-" + image_name+ ".jpg";
-        File file = new File(myDir, fname);
-        if (file.exists()) file.delete();
-        Log.i("LOAD", root + fname);
+    private void saveImage(Bitmap finalBitmap) {
+        //Establishes the path to image and makes the directories needed
+        String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/Pictures/PaintCanvas/";
+        File root = new File(rootPath);
+        root.mkdirs();
+
+        String fileName = "myPaintCanvasPic"+System.currentTimeMillis()+".jpg";
+        File file = new File(root, fileName).getAbsoluteFile();
+//        if (file.exists()) file.delete();
+        Log.i("LOAD", root + fileName);
         try {
-            FileOutputStream out = new FileOutputStream(file);
-            finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-            out.flush();
-            out.close();
+            out = new FileOutputStream(file);
         } catch (Exception e) {
+            Log.i("Error","fileStream not created.");
             e.printStackTrace();
         }
+        finalBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+        try {
+            out.flush();
+            out.close();
+        } catch (IOException e) {
+            Log.i("Error","flush/close not started.");
+            e.printStackTrace();
+        }
+//        scanMedia(file);
+    }
+    private void scanMedia(File file) {
+        Uri uri = Uri.fromFile(file);
+        Intent scanFileIntent = new Intent(
+                Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
+        sendBroadcast(scanFileIntent);
     }
     private void saveImageToGallery( String title, String description){
         drawView.setDrawingCacheEnabled(true);
@@ -211,8 +243,7 @@ public class CanvasActivity extends AppCompatActivity {
         MediaStore.Images.Media.insertImage(getContentResolver(), b,title, description);
     }
     private void SaveImage(Bitmap finalBitmap) {
-        String root = Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES).toString();
+        String root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
         File myDir = new File(root + "/PaintCanvasDrawings");
         myDir.mkdirs();
         Random generator = new Random();
@@ -225,8 +256,7 @@ public class CanvasActivity extends AppCompatActivity {
         try {
             FileOutputStream out = new FileOutputStream(file);
             finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-            // sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,
-            //     Uri.parse("file://"+ Environment.getExternalStorageDirectory())));
+            // sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://"+ Environment.getExternalStorageDirectory())));
             out.flush();
             out.close();
 
@@ -243,12 +273,50 @@ public class CanvasActivity extends AppCompatActivity {
                     }
                 });
     }
-
     //Takes screenshot of view based on its dimensions
     public void screenShot(View view) {
         Bitmap bitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         view.draw(canvas);
         imgView.setImageBitmap(bitmap); //for testing purposes!
+    }
+
+    public Bitmap screenshotAsBitmap(View view){
+        return Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+    }
+
+    private void requestStorageAccessPermission(){
+        if(ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.WRITE_EXTERNAL_STORAGE)){
+            new AlertDialog.Builder(this)
+                    .setTitle("Permission needed")
+                    .setMessage("Permission needed to save drawing")
+                    .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ActivityCompat.requestPermissions(CanvasActivity.this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE},STORAGE_PERMISSION_CODE);
+                        }
+                    })
+                    .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .create().show();
+        } else {
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE},STORAGE_PERMISSION_CODE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(requestCode == STORAGE_PERMISSION_CODE){
+            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                saveImage(screenshotAsBitmap(frm_layout));
+                Toast.makeText(this, "Permission GRANTED",Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Permission NOT GRANTED",Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }
