@@ -116,7 +116,7 @@ public class CanvasActivity extends AppCompatActivity {
                                 if (ContextCompat.checkSelfPermission(CanvasActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                                         == PackageManager.PERMISSION_GRANTED) { shareImageFile(saveImage(screenshotAsBitmap(frm_layout))); }
                                 else { requestStorageAccessPermission();}
-                                Toast.makeText(CanvasActivity.this, "share clicked", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(CanvasActivity.this, "Share Options", Toast.LENGTH_SHORT).show();
                                 return true;
                             default:
                                 return false;
