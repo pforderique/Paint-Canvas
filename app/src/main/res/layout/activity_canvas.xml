@@ -126,7 +126,7 @@
             android:layout_gravity="center"
             android:layout_margin="4dp"
             android:layout_weight="1"
-            android:background="@drawable/pallete_nobg" />
+            android:background="@drawable/palette_nobg" />
 
         <TextView
             android:id="@+id/colorDispView"

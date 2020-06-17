@@ -26,8 +26,8 @@
 
     <ImageView
         android:id="@+id/appLogo"
-        android:layout_width="265dp"
-        android:layout_height="246dp"
+        android:layout_width="294dp"
+        android:layout_height="277dp"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         android:adjustViewBounds="true"
@@ -36,7 +36,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/topBorder"
-        app:srcCompat="@drawable/logo_main_nobg" />
+        app:srcCompat="@drawable/main_screen_nobg" />
 
     <TextView
         android:id="@+id/bottomBorder"
