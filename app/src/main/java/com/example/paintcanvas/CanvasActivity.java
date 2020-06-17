@@ -35,6 +35,12 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -42,6 +48,7 @@ import java.io.IOException;
 import yuku.ambilwarna.AmbilWarnaDialog;
 
 public class CanvasActivity extends AppCompatActivity {
+    private AdView mAdView; // for ads
     FrameLayout frm_layout;
     DrawingView drawView;
     FileOutputStream out;
@@ -165,6 +172,15 @@ public class CanvasActivity extends AppCompatActivity {
                 dialog.show();
             }
         });
+
+        //Google Admob
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) { }
+        });
+        mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
     }
 
     //method for changing pen size from popup and displaying correspondingly
