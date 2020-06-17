@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -34,6 +35,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -217,11 +219,12 @@ public class CanvasActivity extends AppCompatActivity {
         Log.i("LOAD", root + fileName);
         try {
             out = new FileOutputStream(file);
+            Log.i("Passed","Fileoutputstream created");
         } catch (Exception e) {
             Log.i("Error","fileStream not created.");
             e.printStackTrace();
         }
-        finalBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+        finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
         try {
             out.flush();
             out.close();
@@ -229,7 +232,7 @@ public class CanvasActivity extends AppCompatActivity {
             Log.i("Error","flush/close not started.");
             e.printStackTrace();
         }
-//        scanMedia(file);
+        scanMedia(file);
     }
     private void scanMedia(File file) {
         Uri uri = Uri.fromFile(file);
@@ -282,7 +285,10 @@ public class CanvasActivity extends AppCompatActivity {
     }
 
     public Bitmap screenshotAsBitmap(View view){
-        return Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        view.draw(canvas);
+        return bitmap;
     }
 
     private void requestStorageAccessPermission(){
