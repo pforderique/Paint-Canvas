@@ -1,4 +1,4 @@
-package com.example.paintcanvas;
+package com.paintcanvasapp.paintcanvas;
 /**TODO:
  * Find why one path is being drawn at the start - this might be the reason for undo button taking one more initially to actually start undoing
  * Fix color not changing until after path is drawn when a new color has just been selected (works fine after initial path after color change is drawn)*/
@@ -8,7 +8,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View.OnTouchListener;
 import android.view.View;
@@ -62,7 +61,7 @@ public class DrawingView extends View implements OnTouchListener {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        Log.i("Number of Paths",""+paths.size());
+//        Log.i("Number of Paths",""+paths.size());
         //draws past paths
         for (Path p : paths) {
             mPaint.setColor(strokeMap.get(p).getStrokeColor());
@@ -102,7 +101,7 @@ public class DrawingView extends View implements OnTouchListener {
         //Add current path to paths list and color hashmap + log it
         paths.add(mPath);
         strokeMap.put(mPath, new Stroke(mPaint.getColor(),mPaint.getStrokeWidth()));
-        Log.i("hashmap", strokeMap.toString());
+//        Log.i("hashmap", strokeMap.toString());
         // kill this so we don't double draw
         mPath = new Path();
         mPath.reset();

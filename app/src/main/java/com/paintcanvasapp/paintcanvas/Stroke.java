@@ -1,4 +1,4 @@
-package com.example.paintcanvas;
+package com.paintcanvasapp.paintcanvas;
 
 public class Stroke {
     private int color;

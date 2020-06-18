@@ -1,4 +1,4 @@
-package com.example.paintcanvas;
+package com.paintcanvasapp.paintcanvas;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package com.example.paintcanvas;
+package com.paintcanvasapp.paintcanvas;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -271,7 +271,7 @@ public class CanvasActivity extends AppCompatActivity {
         //Creates file location and compresses image there
         String fileName = "PaintCanvasDrawing"+System.currentTimeMillis()+".jpg";
         File imgFile = new File(root, fileName).getAbsoluteFile();
-        Log.i("Loaded", root.getAbsolutePath()+"/"+fileName);
+//        Log.i("Loaded", root.getAbsolutePath()+"/"+fileName);
         try { out = new FileOutputStream(imgFile); }
         catch (Exception e) { e.printStackTrace(); }
         finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
