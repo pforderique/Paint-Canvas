@@ -35,9 +35,11 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.ads.mediation.admob.AdMobAdapter;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.RequestConfiguration;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
@@ -46,6 +48,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import yuku.ambilwarna.AmbilWarnaDialog;
+
+import static com.google.android.gms.ads.RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_TRUE;
 
 public class CanvasActivity extends AppCompatActivity {
     private AdView mAdView; // for ads
@@ -174,12 +178,15 @@ public class CanvasActivity extends AppCompatActivity {
         });
 
         //Google Admob
+        RequestConfiguration conf= new RequestConfiguration.Builder().setTagForChildDirectedTreatment(TAG_FOR_CHILD_DIRECTED_TREATMENT_TRUE).build();
+        MobileAds.setRequestConfiguration(conf);
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) { }
         });
+        Bundle extras = new Bundle(); extras.putString("max_ad_content_rating", "G");
         mAdView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
+        AdRequest adRequest = new AdRequest.Builder().addNetworkExtrasBundle(AdMobAdapter.class, extras).build();
         mAdView.loadAd(adRequest);
     }
 
